@@ -1,0 +1,37 @@
+__________________________________________________________________________________________
+Layer           Type                    Output Shape          Param #      Receptive field
+==========================================================================================
+mobilenetv3     MobileNetV3             (-1, 1000)            0            1              
+├─features      Sequential              (-1, 576, 7, 7)       0            1              
+|    └─0        Conv2dNormActivation    (-1, 16, 112, 112)    497          3              
+|    └─1        InvertedResidual        (-1, 16, 56, 56)      810          227            
+|    └─2        InvertedResidual        (-1, 24, 28, 28)      4,203        675            
+|    └─3        InvertedResidual        (-1, 24, 28, 28)      5,819        1571           
+|    └─4        InvertedResidual        (-1, 40, 14, 14)      14,203       15011          
+|    └─5        InvertedResidual        (-1, 40, 14, 14)      58,307       228259         
+|    └─6        InvertedResidual        (-1, 40, 14, 14)      58,307       3213731        
+|    └─7        InvertedResidual        (-1, 48, 14, 14)      22,547       45010339       
+|    └─8        InvertedResidual        (-1, 48, 14, 14)      30,475       630162851      
+|    └─9        InvertedResidual        (-1, 96, 7, 7)        93,195       8340407715     
+|    └─10       InvertedResidual        (-1, 96, 7, 7)        296,595      75805050275    
+|    └─11       InvertedResidual        (-1, 96, 7, 7)        296,595      548057548195   
+|    └─12       Conv2dNormActivation    (-1, 576, 7, 7)       57,601       548057548195   
+├─avgpool       AdaptiveAvgPool2d       (-1, 576, 1, 1)       0            2531518039459  
+├─classifier    Sequential              (-1, 1000)            0            2531518039459  
+|    └─0        Linear                  (-1, 1024)            590,848      2531518039459  
+|    └─1        Hardswish               (-1, 1024)            0            2531518039459  
+|    └─2        Dropout                 (-1, 1024)            0            2531518039459  
+|    └─3        Linear                  (-1, 1000)            1,025,000    2531518039459  
+==========================================================================================
+Trainable params: 2,542,856
+Non-trainable params: 0
+Total params: 2,542,856
+------------------------------------------------------------------------------------------
+Model size (params + buffers): 9.75 Mb
+Framework & CUDA overhead: 487.00 Mb
+Total RAM usage: 496.75 Mb
+------------------------------------------------------------------------------------------
+Floating Point Operations on forward: 123.75 MFLOPs
+Multiply-Accumulations on forward: 63.90 MMACs
+Direct memory accesses on forward: 62.50 MDMAs
+__________________________________________________________________________________________

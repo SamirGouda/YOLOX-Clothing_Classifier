@@ -1,0 +1,17 @@
+lightly==1.2.40
+numpy==1.22.3
+pandas==1.5.2
+Pillow==9.3.0
+prettytable==3.5.0
+pytorch_lightning==1.8.1
+PyYAML==6.0
+sacremoses==0.0.53
+scikit_learn==1.2.0
+skimage==0.0
+thop==0.1.1.post2209072238
+torch==1.12.1
+torchaudio==0.12.1
+torchmetrics==0.11.0
+torchvision==0.13.1
+tqdm==4.64.1
+torchscan==0.1.2
