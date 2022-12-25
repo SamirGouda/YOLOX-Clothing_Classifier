@@ -17,24 +17,24 @@
 
 
 <!-- TABLE OF CONTENTS -->
-<details open="open">
+<!-- <details open="open">
   <summary>Table of Contents</summary>
   <ol>
     <li>
       <a href="#introduction">Introduction</a>
-    <li><a href="#thoughts">Thoughts</a></li>
+    <!-- <li><a href="#thoughts">Thoughts</a></li> -->
   </ol>
-</details>
+<!-- </details> -->
 
 
 
 <!-- ABOUT THE PROJECT -->
-## Introduction
+<!-- ## Introduction -->
 
 <!-- [![Product Name ScreenShot][product-screenshot]](https://example.com) -->
 in this repo i cover [YOLOX](YOLOX-paper/README.md) and a [clothing-classifier](clothing-classifier/README.md)
 
-## Thoughts
+<!-- ## Thoughts -->
 
 
 <!-- [![fingers far from each other][screenshot-2]] -->

@@ -51,21 +51,25 @@ i reproduced COCO/eval results with YOLOX in [YOLOX_notebook](YOLOX_notebook.ipy
 ## Analysis
 
 - feedback
-
+yolox is a great paper, with many improvements introduced to the yolo family, i liked how they decoupled the head and removed many default image augmentation and using advanced label assignment such as dynamic number of positive anchors and dropping anchors and its associated handcrafting engineering for assignment. i did not like the open-source code supplied due to its complexity. 
 
 
 - potential areas of improvements
+1. change backbone and neck
+2. use efficient task aligned head like YOLOE
+
 
 - main contribtuion
-1. integrates NMS free detectors with yolo family
-2. 
+1. replace yolo's head with decoupled head
+2. integrates NMS free detectors with yolo family
+3. using joint losses: BCE Loss for training cls and obj branch, and IoU Loss for training reg branch
+4. Removal of box anchors (improves the portability of the model to edge devices), anchor free
 
 - what's new
 
 1. decoupled head for classification and regression tasks
 2. simOTA Advanced Label Assignment Strategy
 3. strong augmentation (mixed-up and Mosaic)
-4. anchor-free detectors 
 
 
 
