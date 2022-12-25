@@ -6,6 +6,7 @@ clothing-classifier/exp/pytorch/mobilenet
 clothing-classifier/exp/pytorch/mobilenet_v3
 clothing-classifier/exp/pytorch/mobilenet_v3_small/wandb
 clothing-classifier/exp/pytorch/resnet50/resnet50/*
+clothing-classifier/exp/pytorch/resnet50/resnet50
 clothing-classifier/exp/pytorch/resnet50/wandb
 clothing-classifier/exp/test
 clothing-classifier/exp/pytorch/wandb

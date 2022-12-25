@@ -2,8 +2,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/SamirGouda/YOLOX-Clothing_Classifier">
-    <img src="images/yolox.jpg" alt="Logo" width="80" height="80">
+  <a href="https://github.com/SamirGouda/YOLOX-Clothing_Classifier/tree/main/YOLOX-paper">
+    <img src="images/yolox.jpg" alt="Logo" width="440" height="200">
   </a>
 
   <h3 align="center">YOLOX paper</h3>
@@ -23,6 +23,7 @@
     <li>
       <a href="#introduction">Introduction</a>
     <li><a href="#installation">Installation</a></li>
+    <li><a href="#testing">Testing</a></li>
     <li><a href="#analysis">Analysis</a></li>
   </ol>
 </details>
@@ -32,12 +33,19 @@
 <!-- ABOUT THE PROJECT -->
 ## Introduction
 
-<!-- [![Product Name ScreenShot][product-screenshot]](https://example.com) -->
+i tested the [YOLOX](https://github.com/Megvii-BaseDetection/YOLOX) invested some time in their code and implementation of `yolox` in pytorch, and here's my thoughts
 
 
-### Installation
+## Installation
 
 please refer to [run.sh](run.sh) for installation steps
+```
+bash run.sh
+```
+
+## Testing
+
+i reproduced COCO/eval results with YOLOX in [YOLOX_notebook](YOLOX_notebook.ipynb)
 
 <!-- Data -->
 ## Analysis

@@ -2,7 +2,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="">
+  <a href="https://github.com/SamirGouda/YOLOX-Clothing_Classifier/tree/main/clothing-classifier">
     <img src="images/pl.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -23,13 +23,14 @@
     <li>
       <a href="#introduction">Introduction</a>
     <li><a href="#prerequisites">Prerequisites</a></li>
-    <li><a href="#approch">Approch</a></li>
+    <li><a href="#approach">Approach</a></li>
     <li><a href="#data-handling">Data Handling</a></li>
     <li><a href="#results">Results</a></li>
+    <li><a href="#samples">SAMPLES</a></li>
     <li><a href="#receptive-field">Receptive Field</a></li>
     <li><a href="#gflops">GFlops</a></li>
     <li><a href="#veridict">Veridict</a></li>
-    <li><a href="#what's-next">What's Next</a></li>
+    <li><a href="#whats-next">What's Next</a></li>
   </ol>
 </details>
 
@@ -65,14 +66,18 @@ pip install -r requirements.txt
 ```
 
 ## Approach
+
 1. at first, i read [Searching for MobileNetV3](https://arxiv.org/pdf/1905.02244v5.pdf) paper to refresh my memory about image classification, then i looked for pretrained model used for clothing classification, but mostly i found models about clothing segmentation and posing detection, so i decided to train a model with availabe dataset, so i looked for clothing dataset and i found [clothing-dataset-small](https://github.com/alexeygrigorev/clothing-dataset-small)
+
 2. i performed data analysis on the dataset (images distribution and class counts) to study imbalancing, and better help me build the dataset and the dataloader for ex. `WeightedRandomSampler` were used to mitigate data imbalanced classes
 ```
 python analyze_dataset.py --input-dir clothing-dataset-small
 ```
+
 3. i built from scratch a pytorch training scripts with [pytorch-lightning](https://www.pytorchlightning.ai) wrapper and these scripts can be used to train or finetune any pytorch model with ease, the code is minimal and easily read and well documented. the script supports some SOTA techniques and algorithms to improve model convergence and reduce training time for example `amp`, `swa` and `lr_tuning`, it also supports `tensorboard` or online web app `wandb`
 
 4. i choose `mobilenet_v3_small` model from [pytorch-zoo](https://github.com/rwightman/pytorch-image-models) due to its small architecture and minimal GFLOPS (less computations) and it can be easily deployed to mobile phones cpus
+
 5. i started tuning the model params, `lr`, `batch_size` and found best values for optimum training
 ```
 python finetune_vision_mdl_pytorch.py --conf conf/mobilenet.yaml \
@@ -104,16 +109,18 @@ the dataset consists of **3781** images seperated into `train`, `val` and `test`
 |train| 3068|
 |val| 341|
 |test|372|
+
+
 the images are taken for clothes on sheets and not worn by people. images are RGB `400x534` px
-i created a dataset that augments the training images with simple `torchvision augmentations` and the test images are just normalized.
-i used `pytorch_lightning LightningDataModule` to wraps the datasets and the dataloader, also it handles classes imbalancing
+i created a dataset that augments the training images with simple `torchvision augmentations` and the test images are just normalized to `224x224`
+i used `pytorch_lightning LightningDataModule` to wraps the datasets and the dataloader, also i handled class imbalancing
 
 ## Results
 
-**note**: weights of `resnet50` is not shared because it's very large `300MB`
+**note**: weights of `resnet50` is not uploaded because it's very large `300MB`
 
 i finetuned both `mobilenet_v3_small` and `resnet50` to examine effect of model size on system performance.
-i choose `confussion matrix` and `accuracy` and `f1-scores` to be the metrics for model evaluation because *********
+i choose `confussion matrix` and `accuracy` and `f1-scores` to be the metrics for model evaluation because confussion matrix tells me how the model mis-classify class with another, and the accuracy gives rough indication of how the model performs, and f1-score `macro` gives unweighted mean for f1-score per class
 
 - `mobilenet_v3_small`
 
@@ -135,6 +142,8 @@ i choose `confussion matrix` and `accuracy` and `f1-scores` to be the metrics fo
 |  t-shirt   |        -        |   88.89   | 76.92  | 82.47 |      52     |
 
 
+we can see that the model suffers with `shirts` and `dress`
+
 the confusion matrix shows the model mostly confusses `t-shirt` as `longsleeve`
 
 | true/predicted | dress | hat | longsleeve | outwear | pants | shirt | shoes | shorts | skirt | t-shirt |
@@ -149,8 +158,6 @@ the confusion matrix shows the model mostly confusses `t-shirt` as `longsleeve`
 |     shorts     |   0   |  0  |     2      |    0    |   4   |   0   |   0   |   22   |   2   |    0    |
 |     skirt      |   1   |  1  |     0      |    0    |   0   |   0   |   0   |   1    |   9   |    0    |
 |    t-shirt     |   4   |  0  |     7      |    1    |   0   |   0   |   0   |   0    |   0   |    40   |
-
-
 
 
 
@@ -173,6 +180,8 @@ the confusion matrix shows the model mostly confusses `t-shirt` as `longsleeve`
 |   skirt    |        -        |       -        |   68.75   | 91.67  | 78.57 |      12     |
 |  t-shirt   |        -        |       -        |   97.56   | 76.92  | 86.02 |      52     |
 
+`resnet50` only outperform `mobilenet_v3_small` by `3%` 
+
 | true/predicted | dress | hat | longsleeve | outwear | pants | shirt | shoes | shorts | skirt | t-shirt |
 |-|-|-|-|-|-|-|-|-|-|-|
 |     dress      |   12  |  0  |     1      |    0    |   0   |   0   |   0   |   0    |   1   |    1    |
@@ -185,12 +194,29 @@ the confusion matrix shows the model mostly confusses `t-shirt` as `longsleeve`
 |     shorts     |   0   |  0  |     1      |    0    |   2   |   0   |   0   |   26   |   1   |    0    |
 |     skirt      |   0   |  0  |     0      |    0    |   0   |   0   |   0   |   1    |   11  |    0    |
 |    t-shirt     |   5   |  0  |     7      |    0    |   0   |   0   |   0   |   0    |   0   |    40   |
+
+## SAMPLES
+
+- in-domain samples (from same distribution)
+[![test-results][4]]()
+[![test-results][5]]()
+[![test-results][6]]()
+[![test-results][7]]()
+[![test-results][8]]()
+
+- out-domain samples (N/A)
+
 ## Receptive Field
 
 for single path networks the receptive field is calculated recursively as follows
-[![receptive-field-equation][1]](https://distill.pub/2019/computing-receptive-fields/)
+
+
+[![receptive-field-equation][2]](https://distill.pub/2019/computing-receptive-fields/)
+
+
+
 for example in next fig. 
-[![example][2]](https://distill.pub/2019/computing-receptive-fields/)
+[![example][1]](https://distill.pub/2019/computing-receptive-fields/)
 ```
 rf = (2)1+ (1)2+ (2)2*1+ 1 = 9
 ```
@@ -203,6 +229,9 @@ overall receptive field=
 - `resnet50`
 
 overall receptive field=3499
+
+
+
 ## GFLOPS
 
 - `mobilenet_v3_small`
@@ -233,11 +262,17 @@ overall receptive field=3499
 Total `FLOPs`=124.956M, `MACs`=62.478M, `Params`=2.543M
 
 Model size (params + buffers): 9.75 Mb
+
 Framework & CUDA overhead: 487.00 Mb
+
 Total RAM usage: 496.75 Mb
+
 Floating Point Operations on forward: 123.75 MFLOPs
+
 Multiply-Accumulations on forward: 63.90 MMACs
+
 Direct memory accesses on forward: 62.50 MDMAs
+
 
 - `resnet50`
 
@@ -258,22 +293,37 @@ Direct memory accesses on forward: 62.50 MDMAs
 Total `FLOPs`=8.268G, `MACs`=4.134G, `Params`=25.557M
 
 Model size (params + buffers): 97.70 Mb
+
 Framework & CUDA overhead: 487.00 Mb
+
 Total RAM usage: 584.70 Mb
+
 Floating Point Operations on forward: 8.26 GFLOPs
+
 Multiply-Accumulations on forward: 4.15 GMACs
+
 Direct memory accesses on forward: 4.15 GDMAs
+
 
 
 ## Veridict
 
-I choose `mobilenet_v3_small` model over `resnet50` because *******
+I choose `mobilenet_v3_small` model over `resnet50` because resnet50 only outperform `mobilenet_v3_small` by only 3% at the cost of nearly 10 times model size and 66 times FLOPs.
+
+|network|f1-score-macro|MACS|FLOPS|PARAMS|
+|-|-|-|-|-|
+|resnet50|85.73%|4.15 GMACs|8.26 GFLOPs|25.557M|
+|mobilenet_v3_small|82.06%|63.90 MMACs|123.75 MFLOPs|2.543M|
+
+
+
 ## What's Next
 thing i want to do, but time did not help
 
 1. finetune `YOLOX` for clothing classification
 2. finetune with `DeepFashion2` dataset
 3. train a `SimCLR` on clothing
+4. test the models with out-domain images
 
 <!-- [![fingers far from each other][screenshot-2]] -->
 
@@ -284,3 +334,9 @@ thing i want to do, but time did not help
 [dataset]: images/dataset.jpg
 [1]: images/1.jpg
 [2]: images/2.jpg
+[3]: images/3.jpg
+[4]: images/4.jpg
+[5]: images/5.jpg
+[6]: images/6.jpg
+[7]: images/7.jpg
+[8]: images/8.jpg
