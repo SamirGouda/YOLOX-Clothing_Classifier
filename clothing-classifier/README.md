@@ -76,6 +76,8 @@ python analyze_dataset.py --input-dir clothing-dataset-small
 
 3. i built from scratch a pytorch training scripts with [pytorch-lightning](https://www.pytorchlightning.ai) wrapper and these scripts can be used to train or finetune any pytorch model with ease, the code is minimal and easily read and well documented. the script supports some SOTA techniques and algorithms to improve model convergence and reduce training time for example `amp`, `swa` and `lr_tuning`, it also supports `tensorboard` or online web app `wandb`
 
+**NOTE** the scripts [dataset.py](dataset.py) [loss.py](loss.py) [model.py](model.py) [util/utils.py](util/utils.py) [finetune_vision_mdl_pytorch.py](finetune_vision_mdl_pytorch.py) are aim to be modular and should easily be adapted for other tasks and models by editing `conf.yaml` and adding other losses and models in [loss.py](loss.py) [model.py](model.py) respectively and adding custom dataset in [dataset.py](dataset.py)
+
 4. i choose `mobilenet_v3_small` model from [pytorch-zoo](https://github.com/rwightman/pytorch-image-models) due to its small architecture and minimal GFLOPS (less computations) and it can be easily deployed to mobile phones cpus
 
 5. i started tuning the model params, `lr`, `batch_size` and found best values for optimum training
@@ -224,15 +226,22 @@ since i used large networks, i did not implement the code that estimates the rf 
 
 - `mobilenet_v3_small`
 
-overall receptive field=
+overall receptive field=2531518039459 
+
+reported receptive field from `torchscan` is suspicious, i didn't have time to troubleshoot it
 
 - `resnet50`
 
 overall receptive field=3499
 
+receptive field can be increased by increasing kernal size and stride of `Conv2d` layers in both architectures used for example `mobilenet_v3_small` if we increased `features.Conv2dNormActivation.Conv2d` kernel size, from `(3, 3)` to `(5, 5)` the overall receptive field will be increase, and rf can be decresead by decreasing kernal size and stride, if we set all kernal sizes to `(1, 1)` in all layers the overall receptive field will equal to 1
 
 
 ## GFLOPS
+**NOTE**
+Most of modern hardware architectures uses FMA instructions for operations with tensors.
+FMA computes a*x+b as one operation. Roughly GMACs = 0.5 * GFLOPs
+
 
 - `mobilenet_v3_small`
 
@@ -273,6 +282,7 @@ Multiply-Accumulations on forward: 63.90 MMACs
 
 Direct memory accesses on forward: 62.50 MDMAs
 
+most expensive layer is the feature module with `60.835M MACCs`
 
 - `resnet50`
 
@@ -304,6 +314,10 @@ Multiply-Accumulations on forward: 4.15 GMACs
 
 Direct memory accesses on forward: 4.15 GDMAs
 
+most expensive layer is layer 4 with `811.747M MACCs`
+
+#### HOW TO REDUCE MACCs
+we can reduce maccs by using `network pruning` and remove redundant neurons and obtain lightweight models from heavy model, we can use `filter(channel) pruning` to do so 
 
 
 ## Veridict
